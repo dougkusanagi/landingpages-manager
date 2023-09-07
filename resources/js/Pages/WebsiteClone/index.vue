@@ -21,7 +21,7 @@ async function clone() {
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
             >
-                Clone de Páginas
+                Clonar Páginas
             </h2>
         </template>
 
@@ -44,7 +44,7 @@ async function clone() {
                                     type="submit"
                                     :disabled="form.processing"
                                 >
-                                    Clone
+                                    Clonar
                                 </button>
                             </div>
                         </div>
@@ -56,31 +56,48 @@ async function clone() {
                     class="flex items-center gap-6 px-6 py-4 mt-4 bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg"
                 >
                     <a
-                        class="flex-1 overflow-hidden link link-accent text-ellipsis whitespace-nowrap"
-                        :href="landing_page.url"
+                        class="flex-1 overflow-hidden link link-accent link-hover text-ellipsis whitespace-nowrap"
+                        :href="
+                            landing_page.url.startsWith('http')
+                                ? landing_page.url
+                                : 'http://' + landing_page.url
+                        "
+                        target="_blank"
                     >
                         {{ landing_page.url }}
                     </a>
 
-                    <div class="flex flex-col">
-                        <span>Criado em: {{ landing_page.created_at }}</span>
-                        <span>Editado em: {{ landing_page.updated_at }}</span>
+                    <div class="flex flex-col text-sm">
+                        <div class="flex justify-between gap-2">
+                            <span> Criado em: </span>
+                            <span>{{ landing_page.created_at }}</span>
+                        </div>
+
+                        <div class="flex justify-between gap-2">
+                            <span>Editado em: </span>
+                            <span>{{ landing_page.updated_at }}</span>
+                        </div>
                     </div>
 
                     <div class="flex items-center gap-3">
                         <a
                             class="btn btn-accent btn-sm"
                             target="_blank"
-                            :href="'cloned-landingpages/' + landing_page.id"
+                            :href="`cloned-landingpages/${landing_page.id}`"
                         >
                             Ver Baixado
                         </a>
 
-                        <a class="btn btn-outline btn-accent btn-sm" href="#">
+                        <button
+                            class="btn btn-outline btn-accent btn-sm"
+                            disabled
+                        >
                             Editar
-                        </a>
+                        </button>
 
-                        <a class="link link-error" href="#">Excluir</a>
+                        <button class="link link-error link-hover" disabled>
+                            Excluir
+                        </button>
                     </div>
                 </div>
             </div>

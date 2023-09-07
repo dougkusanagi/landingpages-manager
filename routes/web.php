@@ -35,6 +35,10 @@ Route::controller(WebsiteCloneController::class)->group(function () {
     Route::post('/clone-landing-page', 'clone')->name('website.clone');
 })->middleware(['auth', 'verified']);
 
+Route::get('/landing-page-builder', function () {
+    return view('LandingPage/build');
+})->name('landing-page-builder');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

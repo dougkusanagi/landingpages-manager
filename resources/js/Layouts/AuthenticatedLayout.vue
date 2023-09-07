@@ -37,15 +37,22 @@ const showingNavigationDropdown = ref(false);
                                     :href="route('dashboard')"
                                     :active="route().current('dashboard')"
                                 >
-                                    Dashboard
+                                    Início
                                 </NavLink>
 
                                 <NavLink
                                     :href="route('website-clone')"
                                     :active="route().current('website-clone')"
                                 >
-                                    Clone Website
+                                    Clonar Páginas
                                 </NavLink>
+
+                                <a
+                                    :href="route('landing-page-builder')"
+                                    class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-500 transition duration-150 ease-in-out border-b-2 border-transparent dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700"
+                                >
+                                    Contrutor de Páginas
+                                </a>
                             </div>
                         </div>
 

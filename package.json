@@ -19,6 +19,18 @@
     },
     "dependencies": {
         "@tailwindcss/typography": "^0.5.10",
-        "daisyui": "^3.6.5"
+        "daisyui": "^3.6.5",
+        "grapesjs": "^0.21.5",
+        "grapesjs-custom-code": "^1.0.2",
+        "grapesjs-ga": "^1.0.2",
+        "grapesjs-mjml": "^1.0.5",
+        "grapesjs-plugin-ckeditor": "^1.0.1",
+        "grapesjs-plugin-forms": "^2.0.6",
+        "grapesjs-preset-webpage": "^1.0.3",
+        "grapesjs-style-bg": "^2.0.2",
+        "grapesjs-tailwind": "^1.0.10",
+        "grapesjs-tui-image-editor": "^1.0.2",
+        "grapesjs-uppy": "^2.0.0",
+        "grapick": "^0.1.13"
     }
 }
