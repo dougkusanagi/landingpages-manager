@@ -1,13 +1,31 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
+import { useToast } from "vue-toastification";
+import { onMounted, watch } from "vue";
 
 const showingNavigationDropdown = ref(false);
+const flash = computed(() => usePage().props.flash);
+const toast = useToast();
+
+function triggerFlash() {
+    const types = Object.keys(flash.value);
+
+    types.forEach((type) => {
+        if (flash.value[type] !== null) {
+            toast(flash.value[type], { type });
+            flash.value[type] = null;
+        }
+    });
+}
+
+onMounted(triggerFlash);
+watch(flash, triggerFlash);
 </script>
 
 <template>
@@ -41,18 +59,20 @@ const showingNavigationDropdown = ref(false);
                                 </NavLink>
 
                                 <NavLink
+                                    :href="route('landing-page.index')"
+                                    :active="
+                                        route().current('landing-page.index')
+                                    "
+                                >
+                                    Landing Pages
+                                </NavLink>
+
+                                <NavLink
                                     :href="route('website-clone')"
                                     :active="route().current('website-clone')"
                                 >
                                     Clonar Páginas
                                 </NavLink>
-
-                                <a
-                                    :href="route('landing-page-builder')"
-                                    class="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 text-gray-500 transition duration-150 ease-in-out border-b-2 border-transparent dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-700 focus:outline-none focus:text-gray-700 dark:focus:text-gray-300 focus:border-gray-300 dark:focus:border-gray-700"
-                                >
-                                    Contrutor de Páginas
-                                </a>
                             </div>
                         </div>
 

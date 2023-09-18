@@ -12,7 +12,9 @@ class LandingPageController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('LandingPage/index', [
+            'landing_pages' => LandingPage::all(),
+        ]);
     }
 
     /**
@@ -20,7 +22,7 @@ class LandingPageController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('LandingPage/create');
     }
 
     /**
@@ -28,7 +30,10 @@ class LandingPageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        landingPage::create($request->all());
+
+        return redirect()->route('landing-page.index')
+            ->with('success', 'Landing Page criada com sucesso.');
     }
 
     /**

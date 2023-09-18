@@ -7,7 +7,7 @@
         <title inertia>{{ config("app.name", "Laravel") }}</title>
 
         <!-- Scripts -->
-        @vite(['resources/js/grapesjs.js', 'resources/css/grapesjs.css'])
+        @vite(['resources/js/grapesjs.js'])
     </head>
 
     <body class="font-sans antialiased">

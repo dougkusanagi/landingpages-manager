@@ -19,7 +19,7 @@ async function clone() {
     <AuthenticatedLayout>
         <template #header>
             <h2
-                class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+                class="text-xl font-semibold leading-8 text-gray-800 dark:text-gray-200"
             >
                 Clonar Páginas
             </h2>
@@ -29,24 +29,22 @@ async function clone() {
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
                     <form @submit.prevent="clone">
-                        <div class="p-6">
-                            <div
-                                class="flex gap-3 text-gray-900 dark:text-gray-100"
+                        <div
+                            class="flex gap-3 p-6 text-gray-900 dark:text-gray-100"
+                        >
+                            <input
+                                type="text"
+                                v-model="form.url"
+                                placeholder="ex: meuzeushair.com.br"
+                                class="w-full input input-bordered"
+                            />
+                            <button
+                                class="btn btn-primary"
+                                type="submit"
+                                :disabled="form.processing"
                             >
-                                <input
-                                    type="text"
-                                    v-model="form.url"
-                                    placeholder="ex: meuzeushair.com.br"
-                                    class="w-full input input-bordered"
-                                />
-                                <button
-                                    class="btn btn-primary"
-                                    type="submit"
-                                    :disabled="form.processing"
-                                >
-                                    Clonar
-                                </button>
-                            </div>
+                                Clonar
+                            </button>
                         </div>
                     </form>
                 </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WebsiteCloneController;
 use Illuminate\Foundation\Application;
@@ -35,8 +36,14 @@ Route::controller(WebsiteCloneController::class)->group(function () {
     Route::post('/clone-landing-page', 'clone')->name('website.clone');
 })->middleware(['auth', 'verified']);
 
-Route::get('/landing-page-builder', function () {
-    return view('LandingPage/build');
+Route::controller(LandingPageController::class)->group(function () {
+    Route::get('/landing-page', 'index')->name('landing-page.index');
+    Route::get('/landing-page/create', 'create')->name('landing-page.create');
+    Route::post('/landing-page', 'store')->name('landing-page.store');
+})->middleware(['auth', 'verified']);
+
+Route::get('/landing-page-builder/{id}', function ($id) {
+    return view('LandingPage/build', ['id' => $id]);
 })->name('landing-page-builder');
 
 Route::middleware('auth')->group(function () {

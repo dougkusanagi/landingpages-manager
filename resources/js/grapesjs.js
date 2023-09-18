@@ -1,3 +1,5 @@
+import "../css/grapesjs.css";
+
 import grapesjs from "grapesjs";
 import grapesjsTailwind from "grapesjs-tailwind";
 import grapesjsForms from "grapesjs-plugin-forms";

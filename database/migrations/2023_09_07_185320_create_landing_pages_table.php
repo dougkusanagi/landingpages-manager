@@ -16,10 +16,25 @@ return new class extends Migration
 
             $table->string('name');
 
-            $table->string('ftp_host');
-            $table->string('ftp_user');
-            $table->string('ftp_password');
-            $table->string('ftp_path');
+            $table->longText('html')->nullable();
+            $table->longText('css')->nullable();
+
+            $table->longText('custom_header')->nullable();
+            $table->longText('custom_footer')->nullable();
+
+            $table->text('seo_title')->nullable();
+            $table->text('seo_description')->nullable();
+            $table->text('seo_keywords')->nullable();
+
+            $table->text('social_title')->nullable();
+            $table->text('social_description')->nullable();
+            $table->text('social_keywords')->nullable();
+            $table->text('social_image')->nullable();
+
+            $table->string('ftp_host')->nullable();
+            $table->string('ftp_user')->nullable();
+            $table->string('ftp_password')->nullable();
+            $table->string('ftp_path')->nullable();
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate();
