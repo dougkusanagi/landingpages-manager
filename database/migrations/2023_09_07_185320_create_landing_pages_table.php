@@ -18,9 +18,12 @@ return new class extends Migration
 
             $table->longText('html')->nullable();
             $table->longText('css')->nullable();
+            $table->longText('assets')->nullable();
 
-            $table->longText('custom_header')->nullable();
-            $table->longText('custom_footer')->nullable();
+            $table->longText('data')->nullable();
+
+            $table->text('custom_header')->nullable();
+            $table->text('custom_footer')->nullable();
 
             $table->text('seo_title')->nullable();
             $table->text('seo_description')->nullable();

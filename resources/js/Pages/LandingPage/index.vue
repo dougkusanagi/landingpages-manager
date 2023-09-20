@@ -1,10 +1,20 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
     landing_pages: Array,
 });
+
+const form = useForm({
+    name: "",
+});
+
+const create = () => {
+    form.post(route("landing-page.store"), {
+        onSuccess: () => form.reset(),
+    });
+};
 </script>
 
 <template>
@@ -19,40 +29,56 @@ const props = defineProps({
                     Landing Pages
                 </h2>
 
-                <div class="drawer">
-                    <input
-                        id="my-drawer"
-                        type="checkbox"
-                        class="drawer-toggle"
-                    />
+                <div class="w-auto drawer">
+                    <button
+                        class="btn btn-primary"
+                        onclick="modal_landingpage_create.showModal()"
+                    >
+                        Criar
+                    </button>
 
-                    <div class="drawer-content">
-                        <!-- Page content here -->
-                        <label
-                            for="my-drawer"
-                            class="btn btn-primary drawer-button"
-                        >
-                            Criar
-                        </label>
-                    </div>
+                    <dialog id="modal_landingpage_create" class="modal">
+                        <div class="modal-box">
+                            <form @submit.prevent="create">
+                                <div class="flex flex-col gap-3">
+                                    <input
+                                        type="text"
+                                        placeholder="Digite um nome para a página..."
+                                        class="w-full input input-bordered"
+                                        v-model="form.name"
+                                    />
 
-                    <Teleport to="body">
-                        <div class="drawer-side">
-                            <label for="my-drawer" class="drawer-overlay">
-                            </label>
-                            <ul
-                                class="min-h-full p-4 menu w-80 bg-base-200 text-base-content"
-                            >
-                                <!-- Sidebar content here -->
-                                <li>
-                                    <a>Sidebar Item 1</a>
-                                </li>
-                                <li>
-                                    <a>Sidebar Item 2</a>
-                                </li>
-                            </ul>
+                                    <button
+                                        class="btn btn-primary"
+                                        type="submit"
+                                    >
+                                        Salvar
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                    </Teleport>
+
+                        <form method="dialog" class="modal-backdrop">
+                            <button>close</button>
+                        </form>
+                    </dialog>
+
+                    <!-- <form @submit.prevent="create">
+                        <div
+                            class="flex flex-col gap-3 text-gray-900 dark:text-gray-100"
+                        >
+                            <input
+                                type="text"
+                                placeholder="Digite um nome para a página..."
+                                class="w-full input input-bordered"
+                                v-model="form.name"
+                            />
+
+                            <button class="btn btn-primary" type="submit">
+                                Salvar
+                            </button>
+                        </div>
+                    </form> -->
                 </div>
             </div>
         </template>
@@ -60,7 +86,7 @@ const props = defineProps({
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div
-                    class="p-6 bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg"
+                    class="p-6 bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg -z-10"
                 >
                     <div class="overflow-x-auto">
                         <table class="table">

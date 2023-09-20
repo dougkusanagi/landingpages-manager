@@ -10,4 +10,11 @@ class landingPage extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'html' => 'array',
+        'css' => 'array',
+        'assets' => 'array',
+        'data' => 'array',
+    ];
 }

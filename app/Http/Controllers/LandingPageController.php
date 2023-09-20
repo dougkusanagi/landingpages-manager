@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 
 class LandingPageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return inertia('LandingPage/index', [
@@ -17,17 +14,11 @@ class LandingPageController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return inertia('LandingPage/create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         landingPage::create($request->all());
@@ -36,33 +27,34 @@ class LandingPageController extends Controller
             ->with('success', 'Landing Page criada com sucesso.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(landingPage $landingPage)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(landingPage $landingPage)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, landingPage $landingPage)
+    public function load(landingPage $landingPage)
     {
-        //
+        return response()->json([
+            'data' => $landingPage->data
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function update($id)
+    {
+        // dd(request()->all());
+
+        $page = request('pagesHtml')[0];
+
+        landingPage::find($id)
+            ->update([
+                'html' => $page['html'],
+                'css' => $page['css'],
+                'data' => request('data'),
+            ]);
+
+        return response('', 200);
+    }
+
     public function destroy(landingPage $landingPage)
     {
         //

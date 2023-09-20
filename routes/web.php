@@ -40,10 +40,17 @@ Route::controller(LandingPageController::class)->group(function () {
     Route::get('/landing-page', 'index')->name('landing-page.index');
     Route::get('/landing-page/create', 'create')->name('landing-page.create');
     Route::post('/landing-page', 'store')->name('landing-page.store');
+    Route::PUT('/landing-page/update/{id}', 'update')->name('landing-page.update');
+    Route::get('/landing-page/load/{landingPage}', 'load')->name('landing-page.load');
 })->middleware(['auth', 'verified']);
 
-Route::get('/landing-page-builder/{id}', function ($id) {
-    return view('LandingPage/build', ['id' => $id]);
+Route::get('/landing-page-builder/{id}', function () {
+    $csrf = csrf_token();
+    // return inertia('Builder', ['id' => $id, '_token' => $csrf]);
+    return view('LandingPage/build', [
+        // 'id' => $id,
+        // '_token' => $csrf
+    ]);
 })->name('landing-page-builder');
 
 Route::middleware('auth')->group(function () {
