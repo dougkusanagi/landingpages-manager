@@ -62,23 +62,6 @@ const create = () => {
                             <button>close</button>
                         </form>
                     </dialog>
-
-                    <!-- <form @submit.prevent="create">
-                        <div
-                            class="flex flex-col gap-3 text-gray-900 dark:text-gray-100"
-                        >
-                            <input
-                                type="text"
-                                placeholder="Digite um nome para a página..."
-                                class="w-full input input-bordered"
-                                v-model="form.name"
-                            />
-
-                            <button class="btn btn-primary" type="submit">
-                                Salvar
-                            </button>
-                        </div>
-                    </form> -->
                 </div>
             </div>
         </template>
@@ -108,7 +91,12 @@ const create = () => {
 
                                     <td>
                                         <a
-                                            href="#"
+                                            :href="
+                                                route(
+                                                    'landing-page.edit',
+                                                    landing_page.id
+                                                )
+                                            "
                                             class="link link-accent link-hover"
                                         >
                                             {{ landing_page.name }}

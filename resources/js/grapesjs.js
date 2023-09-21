@@ -17,7 +17,7 @@ import "grapesjs-uppy/dist/grapesjs-uppy.min.css";
 
 (async () => {
     const id = route().params.id;
-    const urlStore = route("landing-page.update", id);
+    const urlStore = route("landing-page.update-template", id);
     const urlLoad = route("landing-page.load", id);
     const csrf = document.querySelector('meta[name="_token"]').content;
     const headers = { "X-CSRF-TOKEN": csrf };
@@ -39,10 +39,7 @@ import "grapesjs-uppy/dist/grapesjs-uppy.min.css";
                     urlStore, // Endpoint URL where to store data project
                     urlLoad, // Endpoint URL where to load data project
 
-                    onLoad: (result) => {
-                        console.log(result);
-                        return result.data;
-                    },
+                    onLoad: (result) => result.data,
                     onStore: (data, editor) => {
                         const pagesHtml = editor.Pages.getAll().map((page) => {
                             const component = page.getMainComponent();

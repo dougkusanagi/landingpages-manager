@@ -14,11 +14,6 @@ class LandingPageController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        return inertia('LandingPage/create');
-    }
-
     public function store(Request $request)
     {
         landingPage::create($request->all());
@@ -29,7 +24,19 @@ class LandingPageController extends Controller
 
     public function edit(landingPage $landingPage)
     {
-        //
+        return inertia('LandingPage/edit', [
+            'landing_page' => $landingPage
+        ]);
+    }
+
+    public function update(Request $request, LandingPage $landingPage)
+    {
+        // dd($request->all());
+
+        $landingPage->update($request->all());
+
+        return redirect()->route('landing-page.index')
+            ->with('success', 'Landing Page atualizada com sucesso.');
     }
 
     public function load(landingPage $landingPage)
@@ -39,10 +46,8 @@ class LandingPageController extends Controller
         ]);
     }
 
-    public function update($id)
+    public function updateTemplate($id)
     {
-        // dd(request()->all());
-
         $page = request('pagesHtml')[0];
 
         landingPage::find($id)

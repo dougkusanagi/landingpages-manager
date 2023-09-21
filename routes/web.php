@@ -38,9 +38,10 @@ Route::controller(WebsiteCloneController::class)->group(function () {
 
 Route::controller(LandingPageController::class)->group(function () {
     Route::get('/landing-page', 'index')->name('landing-page.index');
-    Route::get('/landing-page/create', 'create')->name('landing-page.create');
+    Route::get('/landing-page/{landingPage}/edit', 'edit')->name('landing-page.edit');
     Route::post('/landing-page', 'store')->name('landing-page.store');
-    Route::PUT('/landing-page/update/{id}', 'update')->name('landing-page.update');
+    Route::PUT('/landing-page/update-template/{id}', 'updateTemplate')->name('landing-page.update-template');
+    Route::PUT('/landing-page/update/{product}', 'update')->name('landing-page.update');
     Route::get('/landing-page/load/{landingPage}', 'load')->name('landing-page.load');
 })->middleware(['auth', 'verified']);
 
