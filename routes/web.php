@@ -41,7 +41,7 @@ Route::controller(LandingPageController::class)->group(function () {
     Route::get('/landing-page/{landingPage}/edit', 'edit')->name('landing-page.edit');
     Route::post('/landing-page', 'store')->name('landing-page.store');
     Route::PUT('/landing-page/update-template/{id}', 'updateTemplate')->name('landing-page.update-template');
-    Route::PUT('/landing-page/update/{product}', 'update')->name('landing-page.update');
+    Route::PUT('/landing-page/update/{landingPage}', 'update')->name('landing-page.update');
     Route::get('/landing-page/load/{landingPage}', 'load')->name('landing-page.load');
 })->middleware(['auth', 'verified']);
 

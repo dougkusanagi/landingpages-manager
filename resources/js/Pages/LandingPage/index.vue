@@ -31,7 +31,7 @@ const create = () => {
 
                 <div class="w-auto drawer">
                     <button
-                        class="btn btn-primary"
+                        class="btn btn-primary btn-sm"
                         onclick="modal_landingpage_create.showModal()"
                     >
                         Criar
@@ -76,19 +76,13 @@ const create = () => {
                             <!-- head -->
                             <thead>
                                 <tr>
-                                    <th></th>
                                     <th>Nome</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                <!-- row 1 -->
                                 <tr v-for="landing_page in landing_pages">
-                                    <th>
-                                        {{ landing_page.id }}
-                                    </th>
-
                                     <td>
                                         <a
                                             :href="

@@ -31,7 +31,7 @@ class LandingPageController extends Controller
 
     public function update(Request $request, LandingPage $landingPage)
     {
-        // dd($request->all());
+        dd($request->all());
 
         $landingPage->update($request->all());
 
