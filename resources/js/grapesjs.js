@@ -21,6 +21,11 @@ import "grapesjs-uppy/dist/grapesjs-uppy.min.css";
     const urlLoad = route("landing-page.load", id);
     const csrf = document.querySelector('meta[name="_token"]').content;
     const headers = { "X-CSRF-TOKEN": csrf };
+    const template_base = {
+        assets: [],
+        styles: [],
+        pages: [{ frames: [{}] }],
+    };
 
     const escapeName = (name) =>
         `${name}`.trim().replace(/([^a-z0-9\w-:/]+)/gi, "-");
@@ -39,7 +44,9 @@ import "grapesjs-uppy/dist/grapesjs-uppy.min.css";
                     urlStore, // Endpoint URL where to store data project
                     urlLoad, // Endpoint URL where to load data project
 
-                    onLoad: (result) => result.data,
+                    onLoad: (result) => {
+                        return result.data ?? template_base;
+                    },
                     onStore: (data, editor) => {
                         const pagesHtml = editor.Pages.getAll().map((page) => {
                             const component = page.getMainComponent();
