@@ -112,7 +112,12 @@ const create = () => {
                                         </a>
 
                                         <a
-                                            href="#"
+                                            :href="
+                                                route(
+                                                    'landing-page.upload-ftp',
+                                                    landing_page.id
+                                                )
+                                            "
                                             class="btn btn-accent btn-outline btn-sm"
                                         >
                                             Upload FTP

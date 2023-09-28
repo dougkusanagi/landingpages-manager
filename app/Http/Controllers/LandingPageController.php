@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\landingPage;
+use App\Models\LandingPage;
+use App\Services\BuildLandingPageFiles;
 use Illuminate\Http\Request;
 
 class LandingPageController extends Controller
@@ -16,13 +17,13 @@ class LandingPageController extends Controller
 
     public function store(Request $request)
     {
-        landingPage::create($request->all());
+        LandingPage::create($request->all());
 
-        return redirect()->route('landing-page.index')
+        return to_route('landing-page.index')
             ->with('success', 'Landing Page criada com sucesso.');
     }
 
-    public function edit(landingPage $landingPage)
+    public function edit(LandingPage $landingPage)
     {
         return inertia('LandingPage/edit', [
             'landing_page' => $landingPage
@@ -31,15 +32,16 @@ class LandingPageController extends Controller
 
     public function update(Request $request, LandingPage $landingPage)
     {
-        dd($request->all());
+        // dd($request->all());
 
         $landingPage->update($request->all());
 
-        return redirect()->route('landing-page.index')
+        return to_route('landing-page.edit', $landingPage)
+            // to_route('landing-page.index')
             ->with('success', 'Landing Page atualizada com sucesso.');
     }
 
-    public function load(landingPage $landingPage)
+    public function load(LandingPage $landingPage)
     {
         return response()->json([
             'data' => $landingPage->data
@@ -50,7 +52,7 @@ class LandingPageController extends Controller
     {
         $page = request('pagesHtml')[0];
 
-        landingPage::find($id)
+        LandingPage::find($id)
             ->update([
                 'html' => $page['html'],
                 'css' => $page['css'],
@@ -60,7 +62,12 @@ class LandingPageController extends Controller
         return response('', 200);
     }
 
-    public function destroy(landingPage $landingPage)
+    public function uploadFtp(LandingPage $landingPage)
+    {
+        return (new BuildLandingPageFiles)($landingPage);
+    }
+
+    public function destroy(LandingPage $landingPage)
     {
         //
     }

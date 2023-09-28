@@ -35,6 +35,7 @@ return new class extends Migration
             $table->text('social_image')->nullable();
 
             $table->string('ftp_host')->nullable();
+            $table->string('ftp_port')->nullable();
             $table->string('ftp_user')->nullable();
             $table->string('ftp_password')->nullable();
             $table->string('ftp_path')->nullable();

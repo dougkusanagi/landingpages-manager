@@ -1,6 +1,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link, useForm } from "@inertiajs/vue3";
+import { ref } from "vue";
+import { Head, Link, useForm, usePage } from "@inertiajs/vue3";
 import vueFilePond, { setOptions } from "vue-filepond";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
@@ -12,6 +13,8 @@ const props = defineProps({
     landing_page: Object,
 });
 
+const filepond_ref = ref();
+
 const form = useForm({
     name: props.landing_page.name,
     seo_title: props.landing_page.seo_title,
@@ -21,6 +24,11 @@ const form = useForm({
     social_description: props.landing_page.social_description,
     social_keywords: props.landing_page.social_keywords,
     social_image: props.landing_page.social_image,
+    ftp_host: props.landing_page.ftp_host,
+    ftp_port: props.landing_page.ftp_port,
+    ftp_user: props.landing_page.ftp_user,
+    ftp_password: props.landing_page.ftp_password,
+    ftp_path: props.landing_page.ftp_path,
 });
 
 const FilePond = vueFilePond(
@@ -28,22 +36,47 @@ const FilePond = vueFilePond(
     FilePondPluginImagePreview
 );
 
-const handleFilepondInit = () => {
-    filepond.setOptions({
+const handleFilePondInit = () => {
+    setOptions({
+        credits: false,
+        disabled: true,
         server: {
-            url: "/upload",
-            headers: {
-                "X-CSRF-TOKEN": document
-                    .querySelector('meta[name="csrf-token"]')
-                    .getAttribute("content"),
-            },
+            url: "/filepond",
+            headers: { "X-CSRF-TOKEN": usePage().props.csrf_token },
         },
+        maxParallelUploads: 5, // default is 2
+        labelInvalidField: "Somente jpg, png ou webp são permitidos",
+        // storeAsFile: false,
+        // allowReorder: true,
+        // onreorderfiles(files, origin, target) {
+        //     form.social_image = [];
+
+        //     files.forEach((file) =>
+        //         form.social_image.push({
+        //             id: file.id,
+        //             serverId: file.serverId,
+        //             filename: file.filename,
+        //         })
+        //     );
+        // },
     });
 };
 
-const handleFilepondLoad = () => {};
+const handleFilePondProcess = function (error, file) {
+    form.social_image.push({
+        id: file.id,
+        serverId: file.serverId,
+        filename: file.filename,
+    });
+};
 
-const update = () => {
+const handleFilePondRemoveFile = function (error, file) {
+    form.social_image.value = form.social_image.filter(
+        (item) => item.id !== file.id
+    );
+};
+
+const updateLandingPage = () => {
     form.put(route("landing-page.update", props.landing_page.id), {
         preserveScroll: true,
         preserveState: true,
@@ -87,15 +120,15 @@ const update = () => {
 
         <div class="py-12">
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <form @submit.prevent="update" id="update-form">
+                <form @submit.prevent="updateLandingPage" id="update-form">
                     <div class="flex flex-col gap-6">
                         <div
                             class="grid grid-cols-1 gap-4 p-6 text-sm bg-white shadow-sm gap-y-2 lg:grid-cols-3 dark:bg-gray-800 sm:rounded-lg"
                         >
                             <div class="text-gray-600 dark:text-gray-400">
-                                <p class="text-lg font-medium">
+                                <h3 class="text-lg font-medium">
                                     Informações Básicas
-                                </p>
+                                </h3>
 
                                 <p>Todas são obrigatórias</p>
                             </div>
@@ -105,13 +138,17 @@ const update = () => {
                                     class="grid grid-cols-1 gap-4 text-sm gap-y-2 md:grid-cols-5"
                                 >
                                     <div class="md:col-span-5">
-                                        <label for="name">Nome</label>
+                                        <label for="name" class="label">
+                                            <span class="label-text">
+                                                Nome
+                                            </span>
+                                        </label>
 
                                         <input
                                             id="name"
                                             type="text"
                                             placeholder="Ex: Teste"
-                                            class="w-full h-10 px-4 mt-1 border rounded bg-gray-50 input input-bordered"
+                                            class="w-full h-10 input input-bordered"
                                             v-model="form.name"
                                             required
                                             autofocus
@@ -125,9 +162,9 @@ const update = () => {
                             class="grid grid-cols-1 gap-4 p-6 text-sm bg-white shadow-sm gap-y-2 lg:grid-cols-3 dark:bg-gray-800 sm:rounded-lg"
                         >
                             <div class="text-gray-600 dark:text-gray-400">
-                                <p class="text-lg font-medium">
+                                <h3 class="text-lg font-medium">
                                     Otimizações para SEO
-                                </p>
+                                </h3>
 
                                 <p>
                                     Informações pertinentes aos motores de
@@ -149,7 +186,7 @@ const update = () => {
                                         <input
                                             id="seo_title"
                                             type="text"
-                                            class="w-full h-10 px-4 border rounded bg-gray-50 input input-bordered"
+                                            class="w-full h-10 input input-bordered"
                                             v-model="form.seo_title"
                                         />
 
@@ -174,7 +211,7 @@ const update = () => {
 
                                             <textarea
                                                 id="seo_description"
-                                                class="w-full px-4 border rounded bg-gray-50 textarea textarea-bordered"
+                                                class="w-full textarea textarea-bordered"
                                                 v-model="form.seo_description"
                                                 rows="2"
                                             />
@@ -201,7 +238,7 @@ const update = () => {
 
                                             <textarea
                                                 id="seo_keywords"
-                                                class="w-full px-4 border rounded bg-gray-50 textarea textarea-bordered"
+                                                class="w-full textarea textarea-bordered"
                                                 v-model="form.seo_keywords"
                                                 rows="2"
                                             />
@@ -221,15 +258,42 @@ const update = () => {
                         <div
                             class="grid grid-cols-1 gap-4 p-6 text-sm bg-white shadow-sm gap-y-2 lg:grid-cols-3 dark:bg-gray-800 sm:rounded-lg"
                         >
-                            <div class="text-gray-600 dark:text-gray-400">
-                                <p class="text-lg font-medium">
-                                    Otimização de Social Links
-                                </p>
+                            <div
+                                class="flex flex-col gap-6 text-gray-600 dark:text-gray-400"
+                            >
+                                <div>
+                                    <h3 class="text-lg font-medium">
+                                        Otimização de Social Links
+                                    </h3>
 
-                                <p>
-                                    Informações pertinentes aos links de redes
-                                    sociais
-                                </p>
+                                    <p>
+                                        Informações pertinentes aos links de
+                                        redes sociais
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <label for="social_title" class="label">
+                                        <span class="label-text">
+                                            Miniatura
+                                        </span>
+                                    </label>
+
+                                    <file-pond
+                                        class="mb-0"
+                                        ref="filepond_ref"
+                                        @init="handleFilePondInit"
+                                        @processfile="handleFilePondProcess"
+                                        @removefile="handleFilePondRemoveFile"
+                                    />
+
+                                    <label class="label">
+                                        <span class="label-text-alt">
+                                            Miniatura que acompanha o link
+                                            compartilhado na rede social
+                                        </span>
+                                    </label>
+                                </div>
                             </div>
 
                             <div class="lg:col-span-2">
@@ -246,7 +310,7 @@ const update = () => {
                                         <input
                                             id="social_title"
                                             type="text"
-                                            class="w-full h-10 px-4 border rounded bg-gray-50 input input-bordered"
+                                            class="w-full h-10 input input-bordered"
                                             v-model="form.social_title"
                                         />
 
@@ -271,7 +335,7 @@ const update = () => {
 
                                             <textarea
                                                 id="social_description"
-                                                class="w-full px-4 border rounded bg-gray-50 textarea textarea-bordered"
+                                                class="w-full textarea textarea-bordered"
                                                 v-model="
                                                     form.social_description
                                                 "
@@ -300,7 +364,7 @@ const update = () => {
 
                                             <textarea
                                                 id="social_keywords"
-                                                class="w-full px-4 border rounded bg-gray-50 textarea textarea-bordered"
+                                                class="w-full textarea textarea-bordered"
                                                 v-model="form.social_keywords"
                                                 rows="2"
                                             />
@@ -313,40 +377,103 @@ const update = () => {
                                             </label>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                    <div class="md:col-span-5">
-                                        <label for="social_title" class="label">
+                        <div
+                            class="grid grid-cols-1 gap-4 p-6 text-sm bg-white shadow-sm gap-y-2 lg:grid-cols-3 dark:bg-gray-800 sm:rounded-lg"
+                        >
+                            <div class="text-gray-600 dark:text-gray-400">
+                                <h3 class="text-lg font-medium">
+                                    Configurações FTP
+                                </h3>
+
+                                <p>
+                                    Informações para enviar os arquivos para o
+                                    servidor
+                                </p>
+                            </div>
+
+                            <div class="lg:col-span-2">
+                                <div
+                                    class="grid grid-cols-1 gap-4 text-sm gap-y-4 md:grid-cols-6"
+                                >
+                                    <div class="md:col-span-4">
+                                        <label for="ftp_host" class="label">
                                             <span class="label-text">
-                                                Miniatura
+                                                Host
                                             </span>
-                                        </label>
-
-                                        <label class="label">
                                             <span class="label-text-alt">
-                                                Miniatura que acompanha o link
-                                                compartilhado na rede social
+                                                Endereço do servidor
                                             </span>
                                         </label>
 
-                                        <file-pond
-                                            name="social_image"
-                                            accepted-file-types="image/jpeg, image/png, image/webp"
-                                            :allow-multiple="false"
-                                            :files="form.social_image"
-                                            :init="handleFilepondInit"
-                                            :server="{
-                                                url: '',
-                                                timeout: 7000,
-                                                proccess: {
-                                                    url: 'upload-landingpage-social-image',
-                                                    method: 'POST',
-                                                    onload: handleFilepondLoad,
-                                                },
-                                                headers: {
-                                                    'X-CSRF-TOKEN':
-                                                        $page.props.csrf_token,
-                                                },
-                                            }"
+                                        <input
+                                            id="ftp_host"
+                                            type="text"
+                                            class="w-full h-10 input input-bordered"
+                                            v-model="form.ftp_host"
+                                        />
+                                    </div>
+
+                                    <div class="md:col-span-2">
+                                        <label for="ftp_port" class="label">
+                                            <span class="label-text">
+                                                Porta
+                                            </span>
+                                        </label>
+
+                                        <input
+                                            id="ftp_port"
+                                            type="text"
+                                            class="w-full h-10 input input-bordered"
+                                            v-model="form.ftp_port"
+                                        />
+                                    </div>
+
+                                    <div class="md:col-span-3">
+                                        <label for="ftp_user" class="label">
+                                            <span class="label-text">
+                                                Usuário
+                                            </span>
+                                        </label>
+
+                                        <input
+                                            id="ftp_user"
+                                            type="text"
+                                            class="w-full h-10 input input-bordered"
+                                            v-model="form.ftp_user"
+                                        />
+                                    </div>
+
+                                    <div class="md:col-span-3">
+                                        <label for="ftp_password" class="label">
+                                            <span class="label-text">
+                                                Senha
+                                            </span>
+                                        </label>
+
+                                        <input
+                                            id="ftp_password"
+                                            type="text"
+                                            class="w-full h-10 input input-bordered"
+                                            v-model="form.ftp_password"
+                                        />
+                                    </div>
+
+                                    <div class="md:col-span-6">
+                                        <label for="ftp_path" class="label">
+                                            <span class="label-text">
+                                                Caminho
+                                            </span>
+                                        </label>
+
+                                        <input
+                                            id="ftp_path"
+                                            type="text"
+                                            class="w-full h-10 input input-bordered"
+                                            v-model="form.ftp_path"
                                         />
                                     </div>
                                 </div>
@@ -358,3 +485,9 @@ const update = () => {
         </div>
     </AuthenticatedLayout>
 </template>
+
+<style>
+.filepond--root {
+    margin-bottom: 0 !important;
+}
+</style>
