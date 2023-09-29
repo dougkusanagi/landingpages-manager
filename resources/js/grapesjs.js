@@ -21,7 +21,7 @@ import "grapesjs-uppy/dist/grapesjs-uppy.min.css";
     const urlLoad = route("landing-page.load", id);
     const csrf = document.querySelector('meta[name="_token"]').content;
     const headers = { "X-CSRF-TOKEN": csrf };
-    const template_base = {
+    const template_empty = {
         assets: [],
         styles: [],
         pages: [{ frames: [{}] }],
@@ -45,7 +45,7 @@ import "grapesjs-uppy/dist/grapesjs-uppy.min.css";
                     urlLoad, // Endpoint URL where to load data project
 
                     onLoad: (result) => {
-                        return result.data ?? template_base;
+                        return result.data ?? template_empty;
                     },
                     onStore: (data, editor) => {
                         const pagesHtml = editor.Pages.getAll().map((page) => {
